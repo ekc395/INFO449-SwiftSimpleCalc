@@ -27,11 +27,70 @@ print("Welcome to the UW Calculator Playground")
 //: For this latter set of operations, it is safe to assume that `["count"]` (with no additional arguments) is 0, `["avg"]` is also 0, and `["fact"]` is 0. `["1", "fact"]` should return 1, and `["0", "fact"]` should also return 1. (Yes, 0-factorial is 1. True story.)
 //: 
 func calculate(_ args: [String]) -> Int {
-    return -1
+    if args.isEmpty {
+        return 0
+    }
+    
+    let lastStr = args.last
+    
+    if lastStr == "count" {
+        return args.count - 1
+    }
+    
+    if lastStr == "avg" {
+        if (args.count == 1) {
+            return 0
+        }
+        var sum = 0
+        for index in 0..<(args.count - 1) {
+            sum = sum + Int(args[index])!
+        }
+        return sum / (args.count - 1)
+    }
+    
+    if lastStr == "fact" {
+        if (args.count == 1) {
+            return 0
+        }
+        var num = Int(args[0])!
+        if num == 0 || num == 1 {
+            return 1
+        }
+        var res = 1
+        for i in 1...num {
+            res = res * i
+        }
+        return res
+    }
+    
+    if (args.count == 3) {
+        let left = Int(args[0])!
+        let operation = args[1]
+        let right = Int(args[2])!
+        
+        if (operation == "+") {
+            return left + right
+        } else if (operation == "-") {
+            return left - right
+        } else if (operation == "*") {
+            return left * right
+        } else if (operation == "/") {
+            return left / right
+        } else {
+            return left % right
+        }
+    }
+    
+    return 0
 }
 
 func calculate(_ arg: String) -> Int {
-    return -1
+    let parts = arg.split(separator: " ")
+       var strings: [String] = []
+       for part in parts {
+           strings.append(String(part))
+       }
+       return calculate(strings)
 }
 
 //: Below this are the test expressions/calls to verify if your code is correct.
@@ -85,7 +144,7 @@ calculate("5 fact") == 120
 //: Implement `calculate([String])` and `calculate(String)` to handle negative numbers. You need only make the tests below pass. (You do not need to worry about "fact"/factorial with negative numbers, for example.)
 //:
 //: This is worth 1 pt
-/*
+
 calculate(["2", "+", "-2"]) == 0
 calculate(["2", "-", "-2"]) == 4
 calculate(["2", "*", "-2"]) == -4
@@ -100,7 +159,6 @@ calculate("2 - -2") == 4
 calculate("-2 / 2") == -1
 
 calculate("1 -2 3 -4 5 count") == 5
-*/
  
 //: Implement `calculate([String])` and `calculate(String)` to use 
 //: and return floating-point values. You need only make the tests 
@@ -112,12 +170,42 @@ calculate("1 -2 3 -4 5 count") == 5
 //: Integer-based versions above.
 //: 
 //: This is worth 1 pt
-/*
+
 func calculate(_ args: [String]) -> Double {
-    return -1.0
+    let lastStr = args.last
+    
+    if lastStr == "count" {
+        return Double(args.count - 1)
+    }
+    
+    if (args.count == 3) {
+        let left = Double(args[0])!
+        let operation = args[1]
+        let right = Double(args[2])!
+        
+        if (operation == "+") {
+            return left + right
+        } else if (operation == "-") {
+            return left - right
+        } else if (operation == "*") {
+            return left * right
+        } else if (operation == "/") {
+            return left / right
+        } else {
+            return left.truncatingRemainder(dividingBy: right)
+        }
+    }
+    
+    return 0
 }
+
 func calculate(_ arg: String) -> Double {
-    return -1.0
+    let parts = arg.split(separator: " ")
+       var strings: [String] = []
+       for part in parts {
+           strings.append(String(part))
+       }
+       return calculate(strings)
 }
 
 calculate(["2.0", "+", "2.0"]) == 4.0
@@ -127,4 +215,3 @@ calculate(["2.5", "*", "2.5"]) == 6.25
 calculate(["2.0", "/", "2.0"]) == 1.0
 calculate(["2.0", "%", "2.0"]) == 0.0
 calculate("1.0 2.0 3.0 4.0 5.0 count") == 5.0
-*/
